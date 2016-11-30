@@ -1,7 +1,6 @@
 package flatten
 
 import (
-	"errors"
 	"fmt"
 	"reflect"
 )
@@ -26,7 +25,7 @@ func Flatten(a []interface{}) ([]int, error) {
 			stack = stack[:li]
 			result = append(result, i)
 		} else {
-			return nil, errors.New(
+			return nil, fmt.Errorf(
 				fmt.Sprintf("bad data format for type: %s, value: %v",
 					reflect.TypeOf(stack[li]), stack[li]))
 		}
