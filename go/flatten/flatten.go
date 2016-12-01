@@ -13,21 +13,21 @@ func Flatten(a []interface{}) ([]int, error) {
 
 	for len(stack) > 0 {
 		li := len(stack) - 1
-		if e, ok := stack[li].([]interface{}); ok {
-			if len(e) > 0 {
-				stack[li] = e[1:]
-				stack = append(stack, e[0])
+		switch x := stack[li].(type) {
+		case []interface{}:
+			if len(x) > 0 {
+				stack[li] = x[1:]
+				stack = append(stack, x[0])
 			} else {
 				//Remove the empty elements.
 				stack = stack[:li]
 			}
-		} else if i, ok := stack[li].(int); ok {
+		case int:
 			stack = stack[:li]
-			result = append(result, i)
-		} else {
-			return nil, fmt.Errorf(
-				fmt.Sprintf("bad data format for type: %s, value: %v",
-					reflect.TypeOf(stack[li]), stack[li]))
+			result = append(result, x)
+		default:
+			return nil, fmt.Errorf("bad data format for type: %s, value: %v",
+				reflect.TypeOf(stack[li]), stack[li])
 		}
 	}
 
