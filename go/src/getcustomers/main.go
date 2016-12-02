@@ -20,8 +20,11 @@ func main() {
 	}{53.3393, -6.2576841}
 
 	customers, err := customer.ReadFromFile(path)
-	if err != nil {
-		log.Fatal(err)
+	for _, e := range err {
+		if e.Level == customer.Fatal {
+			log.Fatal(e.Err.Error())
+		}
+		log.Println(e)
 	}
 
 	sorted := make(customer.ById, 0)
@@ -29,11 +32,13 @@ func main() {
 		lat, err := c.Lat()
 		if err != nil {
 			// Can not use latitude skip over the client.
+			log.Println(err)
 			continue
 		}
 		long, err := c.Long()
 		if err != nil {
 			// Can not use longitude skip over the client.
+			log.Println(err)
 			continue
 		}
 
