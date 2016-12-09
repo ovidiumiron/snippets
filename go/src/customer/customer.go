@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 )
@@ -43,17 +44,9 @@ const (
 	Warning
 )
 
-// Return error only if can not open file.
-func ReadFromFile(path string) ([]Customer, []Error) {
+func read(r io.Reader) ([]Customer, []Error) {
 	var errs []Error
-	file, err := os.Open(path)
-
-	if err != nil {
-		return nil, append(errs, Error{Fatal, err})
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(r)
 	var c struct {
 		User_id   *int
 		Latitude  *string
@@ -79,6 +72,18 @@ func ReadFromFile(path string) ([]Customer, []Error) {
 		customers = append(customers, Customer{*c.User_id, *c.Latitude, *c.Longitude, *c.Name})
 	}
 	return customers, errs
+}
+
+// Return error only if can not open file.
+func ReadFromFile(path string) ([]Customer, []Error) {
+	file, err := os.Open(path)
+
+	if err != nil {
+		return nil, []Error{Error{Fatal, err}}
+	}
+	defer file.Close()
+
+	return read(file)
 }
 
 // Sort by id.

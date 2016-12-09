@@ -44,8 +44,8 @@ func TestReadFromFileSkipMissingFields(t *testing.T) {
 	input := "missing_fields.txt"
 	customers := []Customer{Customer{User_id: 4, Name: "Alice Cahill", Latitude: "51.92893", Longitude: "-10.27699"}}
 	errors := []Error{
-		Error{2, errors.New("b")}, Error{2, errors.New("b")},
-		Error{2, errors.New("b")}, Error{2, errors.New("b")}}
+		Error{1, errors.New("b")}, Error{1, errors.New("b")},
+		Error{1, errors.New("b")}, Error{1, errors.New("b")}}
 
 	got, err := ReadFromFile(input)
 
