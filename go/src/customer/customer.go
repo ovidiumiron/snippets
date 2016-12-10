@@ -17,20 +17,20 @@ type Customer struct {
 	Name      string
 }
 
-func (c Customer) Lat() (float64, error) {
+func (c *Customer) Lat() (float64, error) {
 	return strconv.ParseFloat(c.Latitude, 64)
 }
 
-func (c Customer) Long() (float64, error) {
+func (c *Customer) Long() (float64, error) {
 	return strconv.ParseFloat(c.Longitude, 64)
 }
 
-func (c Customer) String() string {
+func (c *Customer) String() string {
 	return fmt.Sprintf("{id: %d name: %s latitude: %s longitude: %s}\n",
 		c.User_id, c.Name, c.Latitude, c.Longitude)
 }
 
-func (c Customer) Print_IdName() string {
+func (c *Customer) Print_IdName() string {
 	return fmt.Sprintf("{id: %d name: %s}", c.User_id, c.Name)
 }
 
