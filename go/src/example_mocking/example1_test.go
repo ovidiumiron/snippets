@@ -10,8 +10,9 @@ type Bar struct {
 }
 
 // Want to mock this call
-func (b *Bar) barMethod() {
+func (b *Bar) barMethod() int {
 	log.Println("I don't want to see it in unit tests")
+	return 10
 }
 
 type Foo struct {
@@ -20,7 +21,7 @@ type Foo struct {
 }
 
 func (f *Foo) fooMethod() {
-	f.barMethod()
+	log.Println(f.barMethod() + 1)
 }
 
 func TestFooMethod(t *testing.T) {

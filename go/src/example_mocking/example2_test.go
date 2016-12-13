@@ -5,39 +5,38 @@ import (
 	"testing"
 )
 
-type Bar interface {
-	barMethod()
+type IBar interface {
+	barMethod() int
 }
 
-// Want to mock this object. bar implement barMethod so is a Bar
-type bar struct {
+type Bar struct {
 	baz string
 }
 
-func (b *bar) barMethod() {
+// Want to mock this call
+func (b *Bar) barMethod() int {
 	log.Println("I don't want to see it in unit tests")
+	return 10
 }
 
-type mockbar struct {
-	baz string
-}
+type mockbar struct{}
 
-func (f mockbar) barMethod() {
+func (f mockbar) barMethod() int {
 	log.Println("I want to see it in unit tests")
+	return 10
 }
 
 type Foo struct {
 	data string
-	Bar  //interface
+	IBar
 }
 
 func (f *Foo) fooMethod() {
-	f.barMethod()
+	log.Println(f.barMethod() + 1)
 }
 
 func TestFooMethod(t *testing.T) {
-
-	//f := Foo{"data", bar{"baz"}}
-	f := Foo{"data", mockbar{"baz"}}
+	//f := Foo{"data", Bar{"baz"}}
+	f := Foo{"data", mockbar{}}
 	f.fooMethod()
 }
