@@ -15,14 +15,14 @@ type Bar struct {
 
 // Want to mock this call
 func (b *Bar) barMethod() int {
-	log.Println("I don't want to see it in unit tests")
+	log.Println("I don't want to see it in unit tests.")
 	return 10
 }
 
 type mockbar struct{}
 
 func (f mockbar) barMethod() int {
-	log.Println("I want to see it in unit tests")
+	log.Println("I want to see it in unit tests.")
 	return 10
 }
 
