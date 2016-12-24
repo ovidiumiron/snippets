@@ -65,7 +65,7 @@ func read(r io.Reader) ([]Customer, []Error) {
 		}
 		// If there are missing field skip the line.
 		if c.User_id == nil || c.Latitude == nil || c.Longitude == nil || c.Name == nil {
-			errs = append(errs, Error{Warning, errors.New("b")})
+			errs = append(errs, Error{Warning, errors.New("customer: missing at least one field")})
 			continue
 		}
 

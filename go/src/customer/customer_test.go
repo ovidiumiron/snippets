@@ -6,6 +6,47 @@ import (
 	"testing"
 )
 
+// Example how to use an io.Reader. Kept just for further references.
+/*
+type Reader struct {
+	read string
+	done bool
+}
+
+func (r *Reader) Read(p []byte) (n int, err error) {
+	if r.done {
+		return 0, io.EOF
+	}
+
+	for i, b := range []byte(r.read) {
+		p[i] = b
+	}
+	r.done = true
+	return len(r.read), nil
+}
+
+func NewReader(toRead string) *Reader {
+	return &Reader{toRead, false}
+}
+
+func TestReadFunction(t *testing.T) {
+	var tests = []struct {
+		input string
+		want  []Customer
+	}{
+		{
+			"{\"latitude\": \"52.986375\", \"user_id\": 12, \"name\": \"Christina McArdle\", \"longitude\": \"-6.043701\"}",
+			[]Customer{
+				Customer{User_id: 12, Name: "Christina McArdle", Latitude: "52.986375", Longitude: "-6.043701"}}},
+	}
+	for _, test := range tests {
+		if got, err := read(NewReader(test.input)); err != nil || !reflect.DeepEqual(got, test.want) {
+			t.Errorf("read(%v) = %v %v, want %v", test.input, got, err, test.want)
+		}
+	}
+}
+*/
+
 func TestReadFromFilePositiveTests(t *testing.T) {
 	var tests = []struct {
 		input string
@@ -31,11 +72,11 @@ func TestReadFromFileSkipeUnmarshall(t *testing.T) {
 	input := "not_unmarshall.txt"
 	customers := []Customer{Customer{User_id: 1, Name: "Alice Cahill", Latitude: "51.92893", Longitude: "-10.27699"}}
 
-	errors := []Error{Error{2, errors.New("b")}}
+	errors := []Error{Error{2, errors.New("customer: missing at least one field")}}
 
 	got, err := ReadFromFile(input)
 	if !reflect.DeepEqual(got, customers) && reflect.DeepEqual(err, errors) {
-		t.Errorf("aaa")
+		t.Errorf("ReadFromFile(%v) = %v %v, want errors %v", input, got, err, errors)
 	}
 }
 
@@ -44,13 +85,13 @@ func TestReadFromFileSkipMissingFields(t *testing.T) {
 	input := "missing_fields.txt"
 	customers := []Customer{Customer{User_id: 4, Name: "Alice Cahill", Latitude: "51.92893", Longitude: "-10.27699"}}
 	errors := []Error{
-		Error{1, errors.New("b")}, Error{1, errors.New("b")},
-		Error{1, errors.New("b")}, Error{1, errors.New("b")}}
+		Error{1, errors.New("customer: missing at least one field")}, Error{1, errors.New("customer: missing at least one field")},
+		Error{1, errors.New("customer: missing at least one field")}, Error{1, errors.New("customer: missing at least one field")}}
 
 	got, err := ReadFromFile(input)
 
 	if !reflect.DeepEqual(got, customers) || !reflect.DeepEqual(err, errors) {
-		t.Errorf("aaa")
+		t.Errorf("ReadFromFile(%v) = %v %v, want errors %v", input, got, err, errors)
 	}
 }
 
