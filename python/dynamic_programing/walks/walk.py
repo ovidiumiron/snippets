@@ -16,19 +16,23 @@ def walk_left_and_up(dimension):
     [(2, 2), (1, 2), (2, 1), (1, 1), (0, 2), (2, 0), (0, 1), (1, 0), (0, 0)]
     """
     for idx in range(dimension + 1):
-        for coordonate in left_up(idx, dimension):
+        for coordonate in left_up_coordinates(idx, dimension):
             yield coordonate
 
 
-def left_up(idx, dimension):
+def left_up_coordinates(idx, dimension):
     """ Generate coordonates for traversing left and up. """
+    coordinates = list()
     left = dimension - idx
     up = dimension
     while left != up:
-        yield (left, up)
-        yield (up, left)
+        coordinates.append((left, up))
+        coordinates.append((up, left))
         up = up - 1
-    yield (left, up)
+
+    coordinates.append((left, up))
+
+    return coordinates
 
 if __name__ == "__main__":
     import doctest
